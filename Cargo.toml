@@ -5,7 +5,8 @@ edition = "2021"
 authors = ["Ryan Ruckley <rruckley@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-# Sample photo from: https://www.archdaily.com/319613/3way-house-naf-architect-design/50f72d2eb3fc4b262a0003ed-3way-house-naf-architect-design-photo?next_project=no
+# Sample 1 photo from: https://www.archdaily.com/319613/3way-house-naf-architect-design/50f72d2eb3fc4b262a0003ed-3way-house-naf-architect-design-photo?next_project=no
+# Sample 2 photo from: https://www.climbfit.com.au/location/climb-fit-macquarie/
 
 [dependencies]
 anyhow = "1.0.75"
