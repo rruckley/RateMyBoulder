@@ -6,7 +6,7 @@ use opencv::{
     self as cv,
     prelude::*,
     highgui,
-    imgproc,
+    core::Vector,
 };
 
 fn main() -> Result<()> {
@@ -24,27 +24,43 @@ fn main() -> Result<()> {
     let mut frame = Mat::default();
 
     // Read the image
-    let img = opencv::imgcodecs::imread("boulder1.jpg", cv::imgcodecs::IMREAD_GRAYSCALE)?;
+    let img = opencv::imgcodecs::imread("boulder1.jpg", cv::imgcodecs::IMREAD_ANYCOLOR)?;
+    let _hsv = cv::imgproc::cvt_color(&img, &mut frame, cv::imgproc::COLOR_RGB2HSV,0 )?;
+    // Try and find some colours first
+    // Conver to HSV space
+    //let hsv_img = imgproc::
 
     // Seem pretty close
-    let mut thresh1= 51.0;
-    let mut thresh2 = 75.0;
+    /***
+    let thresh1= 51.0;
+    let thresh2 = 75.0;
+    info!("Now using thresholds {} , {}",thresh1, thresh2);
+    imgproc::canny(
+        &img,
+        &mut frame,
+        thresh1,
+        thresh2,
+        3,
+        true
+    )?;
+    **/
+    let mut mask = Mat::default();
+
+    
+
+    // Testing Red
+    let lower : Vector<i32> = cv::core::Vector::from_iter(vec![0,20,20]);
+    let upper : Vector<i32> = cv::core::Vector::from_iter(vec![50,255,255]);
+
+    cv::core::in_range(&img, &lower, &upper, &mut mask)?;
+
+    let mut segment = Mat::default();
+    cv::core::bitwise_and(&img, &50.5, &mut segment, &mask)?;
+
+    highgui::imshow(pkg, &segment)?;
 
     loop {
-        info!("Now using thresholds {} , {}",thresh1, thresh2);
-        imgproc::canny(
-            &img,
-            &mut frame,
-            thresh1,
-            thresh2,
-            3,
-            true
-        )?;
-        highgui::imshow(pkg, &frame)?;
-        thresh1 += 5.0;
-        thresh2 += 6.0;
-        
-        let key = highgui::wait_key(5000)?;
+        let key = highgui::wait_key(1000)?;
         if key == 113 { // quit with q
             break;
         }

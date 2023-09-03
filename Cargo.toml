@@ -1,5 +1,5 @@
 [package]
-name = "RateMyBoulder"
+name = "rate_my_boulder"
 version = "0.1.0"
 edition = "2021"
 authors = ["Ryan Ruckley <rruckley@gmail.com>"]
