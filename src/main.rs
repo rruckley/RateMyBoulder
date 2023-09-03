@@ -9,6 +9,8 @@ use opencv::{
     core::Vector,
 };
 
+const HSV_INC : i32 = 16;
+
 fn main() -> Result<()> {
     env_logger::init();
 
@@ -24,7 +26,7 @@ fn main() -> Result<()> {
     let mut frame = Mat::default();
 
     // Read the image
-    let img = opencv::imgcodecs::imread("boulder1.jpg", cv::imgcodecs::IMREAD_ANYCOLOR)?;
+    let img = opencv::imgcodecs::imread("boulder2.png", cv::imgcodecs::IMREAD_ANYCOLOR)?;
     let _hsv = cv::imgproc::cvt_color(&img, &mut frame, cv::imgproc::COLOR_RGB2HSV,0 )?;
     // Try and find some colours first
     // Conver to HSV space
@@ -48,22 +50,27 @@ fn main() -> Result<()> {
 
     
 
-    // Testing Red
-    let lower : Vector<i32> = cv::core::Vector::from_iter(vec![0,20,20]);
-    let upper : Vector<i32> = cv::core::Vector::from_iter(vec![50,255,255]);
-
-    cv::core::in_range(&img, &lower, &upper, &mut mask)?;
-
-    let mut segment = Mat::default();
-    cv::core::bitwise_and(&img, &50.5, &mut segment, &mask)?;
-
-    highgui::imshow(pkg, &segment)?;
+    let mut hsv = 0;
 
     loop {
-        let key = highgui::wait_key(1000)?;
+        if hsv > 240 { break; } ;
+        // Testing Red
+        let lower : Vector<i32> = cv::core::Vector::from_iter(vec![hsv,150,150]);
+        let upper : Vector<i32> = cv::core::Vector::from_iter(vec![hsv+HSV_INC,250,250]);
+
+        info!("Base range: {hsv} - {}",hsv+48);
+        cv::core::in_range(&img, &lower, &upper, &mut mask)?;
+
+        let mut segment = Mat::default();
+        cv::core::bitwise_and(&img, &255.0, &mut segment, &mask)?;
+
+        highgui::imshow(pkg, &segment)?;
+        let key = highgui::wait_key(5000)?;
         if key == 113 { // quit with q
             break;
         }
+
+        hsv += HSV_INC;
     }
 
     Ok(())
